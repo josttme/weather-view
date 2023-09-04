@@ -7,19 +7,17 @@ export function useListCities({ searchTerm }) {
 	const [error, setError] = useState(null)
 
 	useEffect(() => {
-		async function fetchData() {
-			try {
-				if (!searchTerm) return
-				const { cities } = await fetchCity({ searchTerm })
+		if (!searchTerm) return
+		fetchCity({ searchTerm })
+			.then((result) => {
+				const { cities } = result
 				setCities(cities)
 				setLoading(false)
-			} catch (error) {
+			})
+			.catch((error) => {
 				setError(error)
 				setLoading(false)
-			}
-		}
-
-		fetchData()
+			})
 	}, [searchTerm])
 
 	return { cities, loading, error }

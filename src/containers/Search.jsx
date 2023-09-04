@@ -10,16 +10,12 @@ export function Search() {
 		setSearchTerm(search)
 	}
 	const { cities, loading } = useListCities({ searchTerm })
-	console.log(cities)
 	return (
 		<section className="m-3 mx-auto w-11/12 max-w-md">
 			<SearchCities onSearch={handleSearchChange} />
-			{/* Muestra el mensaje de carga o error según corresponda */}
 			{loading && <div>Cargando...</div>}
 
-			{(cities?.length > 0 || searchTerm.trim() !== '') && (
-				<ListCities cities={cities} />
-			)}
+			<ListCities cities={cities} searchTerm={searchTerm} />
 		</section>
 	)
 }

@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types'
-import { useWeather } from '../hooks/useWeather'
+import { useContext } from 'react'
+import { WeatherContext } from '../context/WeatherContext'
+
 export function ItemCity(city) {
-	const { selectCity } = useWeather()
+	const { selectCity } = useContext(WeatherContext)
+
 	const urlCountryFlag = (countryCode) =>
 		`https://open-meteo.com/images/country-flags/${countryCode}.svg`
 
