@@ -2,15 +2,22 @@ import PropTypes from 'prop-types'
 import { useContext } from 'react'
 import { WeatherContext } from '../context/WeatherContext'
 
-export function ItemCity(city) {
+export function ItemCity({
+	id,
+	country,
+	name,
+	countryCode,
+	admin1,
+	latitude,
+	longitude
+}) {
 	const { selectCity } = useContext(WeatherContext)
 
 	const urlCountryFlag = (countryCode) =>
 		`https://open-meteo.com/images/country-flags/${countryCode}.svg`
 
 	const handleClick = () => {
-		const cityData = { ...city }
-		selectCity(cityData)
+		selectCity({ id, country, name, latitude, longitude })
 	}
 	return (
 		<div
@@ -19,12 +26,12 @@ export function ItemCity(city) {
 		>
 			<img
 				className="mx-4 w-12"
-				src={urlCountryFlag(city.countryCode)}
-				alt={`Bandera de ${city.country}`}
+				src={urlCountryFlag(countryCode)}
+				alt={`Bandera de ${country}`}
 			/>
 			<div className="text-lg text-white/80">
-				<p>{city.name}</p>
-				<p>{city.admin1}</p>
+				<p>{name}</p>
+				<p>{admin1}</p>
 			</div>
 		</div>
 	)
@@ -35,5 +42,7 @@ ItemCity.propTypes = {
 	countryCode: PropTypes.string,
 	country: PropTypes.string,
 	name: PropTypes.string,
-	admin1: PropTypes.string
+	admin1: PropTypes.string,
+	latitude: PropTypes.number,
+	longitude: PropTypes.number
 }

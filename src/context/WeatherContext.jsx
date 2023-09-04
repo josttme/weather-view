@@ -1,48 +1,28 @@
 import { createContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useWeather } from '../hooks/useWeather'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 
 export const WeatherContext = createContext()
 
 export function WeatherProvider({ children }) {
-	const { weatherData, getCityByLatLong } = useWeather()
-	const [weatherCards, setWeatherCards] = useState({})
+	const [citiesStorage, setCityStorage] = useLocalStorage('ListWeather')
+	const [selectedCities, setSelectedCities] = useState(citiesStorage)
 
 	const selectCity = (city) => {
-		getCityByLatLong(city)
+		setSelectedCities([...selectedCities, city])
 	}
-	useEffect(() => {
-		setWeatherCards(weatherData)
-	}, [weatherData])
 
 	useEffect(() => {
-		console.log(weatherCards)
-	}, [weatherCards])
+		setCityStorage(selectedCities)
+	}, [selectedCities])
 
-	/* 	const removeCity = (cityId) => {
-		// Lógica para eliminar una ciudad de selectedCities
-		const updatedCities = selectedCities.filter((city) => city.id !== cityId)
-		setSelectedCities(updatedCities)
-	}
- */
-	/* 	const addWeatherCard = (weatherData) => {
-		// Lógica para agregar una tarjeta de clima a weatherCards
-		setWeatherCards([...weatherCards, weatherData])
-	} */
+	useEffect(() => {
+		console.log(citiesStorage)
+	}, [])
 
-	/* const removeWeatherCard = (cardId) => {
-		// Lógica para eliminar una tarjeta de clima de weatherCards
-		const updatedCards = weatherCards.filter((card) => card.id !== cardId)
-		setWeatherCards(updatedCards)
-	}
- */
 	const valueContext = {
-		/* 	selectedCities, */
-		/* 		weatherCards, */
-		selectCity
-		/* 		removeCity,
-		addWeatherCard,
-		removeWeatherCard */
+		selectCity,
+		citiesStorage
 	}
 
 	return (
