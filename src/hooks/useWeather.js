@@ -1,6 +1,6 @@
+import { utcToZonedTime, format } from 'date-fns-tz'
 import { useState } from 'react'
 import { getWeatherCityByLatLong } from '../services/api'
-
 export function useWeather() {
 	const [weatherData, setWeatherData] = useState(null)
 	const getCityByLatLong = async ({ latitude, longitude }) => {
@@ -40,10 +40,11 @@ function parseCurrentWeather(
 	} = daily
 	const { time, relativehumidity_2m: relativehumidity2m } = hourly
 	const humidity = getCurrentTimeHumidity(currentTime, time, relativehumidity2m)
+	const currentTimeFormatted = currentTimeFormatter(currentTime, timezone)
 	return {
 		city,
 		country,
-		currentTime,
+		currentTime: currentTimeFormatted,
 		currentTemp: Math.round(currentTemp),
 		maxTemp: Math.round(maxTemp),
 		minTemp: Math.round(minTemp),
@@ -59,4 +60,25 @@ function parseCurrentWeather(
 function getCurrentTimeHumidity(currentTime, hourlyTime, humidity) {
 	const positionTime = hourlyTime.findIndex((time) => time === currentTime)
 	return humidity[positionTime]
+}
+
+function dateFormatter(time) {
+	const date = new Date(time * 1000)
+	const dateStr = date.toLocaleDateString([], {
+		weekday: 'short',
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric'
+	})
+	return dateStr
+}
+export function currentTimeFormatter(currentTime, timeZone) {
+	const date = new Date()
+	const parseDate = (date, timeZone) => {
+		const newDate = utcToZonedTime(date, timeZone)
+		return format(newDate, 'HH:mm', { timeZone })
+	}
+	const message = parseDate(date, timeZone)
+	const result = dateFormatter(currentTime)
+	return `${result}, ${message}`
 }

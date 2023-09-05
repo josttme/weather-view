@@ -1,12 +1,14 @@
 import { createContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useWeather } from '../hooks/useWeather'
 
 export const WeatherContext = createContext()
 
 export function WeatherProvider({ children }) {
 	const [citiesStorage, setCityStorage] = useLocalStorage('ListWeather')
 	const [selectedCities, setSelectedCities] = useState(citiesStorage)
+	const { getCityByLatLong, weatherData } = useWeather()
 
 	const selectCity = (city) => {
 		setSelectedCities([...selectedCities, city])
@@ -16,13 +18,15 @@ export function WeatherProvider({ children }) {
 		setCityStorage(selectedCities)
 	}, [selectedCities])
 
-	useEffect(() => {
+	/* 	useEffect(() => {
 		console.log(citiesStorage)
-	}, [])
+	}, []) */
 
 	const valueContext = {
 		selectCity,
-		citiesStorage
+		citiesStorage,
+		weatherData,
+		getCityByLatLong
 	}
 
 	return (
