@@ -11,7 +11,7 @@ export function Search() {
 	}
 	const { cities, loading } = useListCities({ searchTerm })
 	return (
-		<section className="m-3 mx-auto w-11/12 max-w-md">
+		<section className="relative m-3 mx-auto w-11/12 max-w-md">
 			<SearchCities onSearch={handleSearchChange} />
 			{loading && <div>Cargando...</div>}
 

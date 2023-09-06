@@ -1,16 +1,19 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { WeatherContext } from '../context/WeatherContext'
 import { PropTypes } from 'prop-types'
 
 export function WeatherCard({ latitude, longitude }) {
 	const { weatherData, getCityByLatLong } = useContext(WeatherContext)
-
+	const [weather, setWeather] = useState(null)
+	console.log(weatherData)
 	useEffect(() => {
 		getCityByLatLong({ latitude, longitude })
+		setWeather(weatherData)
 	}, [])
-	if (weatherData === null) return
+
+	if (weather === null) return
 	const {
-		city,
+		cityName,
 		country,
 		currentTemp,
 		currentTime,
@@ -23,12 +26,12 @@ export function WeatherCard({ latitude, longitude }) {
 		sunset,
 		timezone, */
 		windSpeed
-	} = weatherData
+	} = weather
 
 	return (
 		<div className=" grid h-[290px] w-[500px] grid-cols-4 grid-rows-6 rounded-lg bg-blue-700 bg-gradient-to-r from-[#00061f] via-[#001460] to-[#001b7a] p-4 text-xl  text-white/80">
 			<span className="col-span-4">
-				{city} ({country})
+				{cityName} ({country})
 			</span>
 			<img
 				className="col-span-2 row-span-4 h-20 w-20  place-self-center bg-cyan-600"
