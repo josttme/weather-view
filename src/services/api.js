@@ -51,7 +51,7 @@ async function fetchCity({ searchTerm }) {
 	} */
 }
 
-async function getWeatherCityByLatLong({ latitude, longitude, city, country }) {
+async function getWeatherCityByLatLong(latitude, longitude) {
 	/* 	try {
 		const res = await fetch(API_BASE_2)
 		if (!res.ok) {
@@ -65,7 +65,7 @@ async function getWeatherCityByLatLong({ latitude, longitude, city, country }) {
 	} */
 	const res = await fetch(API_BASE(latitude, longitude))
 	const data = await res.json()
-	return { data, city, country }
+	return { data }
 }
 
 export { fetchCity, getWeatherCityByLatLong }

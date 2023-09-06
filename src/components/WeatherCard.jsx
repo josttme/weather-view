@@ -2,19 +2,19 @@ import { useContext, useEffect, useState } from 'react'
 import { WeatherContext } from '../context/WeatherContext'
 import { PropTypes } from 'prop-types'
 
-export function WeatherCard({ latitude, longitude }) {
-	const { weatherData, getCityByLatLong } = useContext(WeatherContext)
-	const [weather, setWeather] = useState(null)
-	console.log(weatherData)
+export function WeatherCard(city) {
+	const { latitude, longitude, name: cityName, country } = city
+	const { getCityByLatLong } = useContext(WeatherContext)
+	const [weatherData, setWeatherData] = useState(null)
+
 	useEffect(() => {
-		getCityByLatLong({ latitude, longitude })
-		setWeather(weatherData)
+		getCityByLatLong(latitude, longitude)
+			.then((data) => setWeatherData(data))
+			.catch((error) => console.error(error))
 	}, [])
 
-	if (weather === null) return
+	if (weatherData === null) return
 	const {
-		cityName,
-		country,
 		currentTemp,
 		currentTime,
 		humidity,
@@ -26,7 +26,7 @@ export function WeatherCard({ latitude, longitude }) {
 		sunset,
 		timezone, */
 		windSpeed
-	} = weather
+	} = weatherData
 
 	return (
 		<div className=" grid h-[290px] w-[500px] grid-cols-4 grid-rows-6 rounded-lg bg-blue-700 bg-gradient-to-r from-[#00061f] via-[#001460] to-[#001b7a] p-4 text-xl  text-white/80">

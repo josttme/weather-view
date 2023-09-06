@@ -1,30 +1,25 @@
 import { utcToZonedTime, format } from 'date-fns-tz'
-import { useState } from 'react'
 import { getWeatherCityByLatLong } from '../services/api'
 export function useWeather() {
-	const [weatherData, setWeatherData] = useState(null)
-	const getCityByLatLong = async ({ latitude, longitude }) => {
+	const getCityByLatLong = async (latitude, longitude) => {
 		if (latitude === undefined || longitude === undefined) return null
 		try {
-			const { data, city, country } = await getWeatherCityByLatLong({
-				latitude,
-				longitude
-			})
-			const currentWeather = parseCurrentWeather(data, city, country)
-			setWeatherData(currentWeather)
+			const { data } = await getWeatherCityByLatLong(latitude, longitude)
+			return parseCurrentWeather(data)
 		} catch (error) {
 			console.error('Error al obtener datos climáticos:', error)
 			// Puedes manejar el error de manera adecuada, como mostrar un mensaje al usuario.
 		}
 	}
-	return { getCityByLatLong, weatherData }
+	return { getCityByLatLong }
 }
 
-function parseCurrentWeather(
-	{ current_weather: currentWeather, daily, hourly, timezone },
-	city,
-	country
-) {
+function parseCurrentWeather({
+	current_weather: currentWeather,
+	daily,
+	hourly,
+	timezone
+}) {
 	const {
 		temperature: currentTemp,
 		windspeed: windSpeed,
@@ -42,8 +37,6 @@ function parseCurrentWeather(
 	const humidity = getCurrentTimeHumidity(currentTime, time, relativehumidity2m)
 	const currentTimeFormatted = currentTimeFormatter(currentTime, timezone)
 	return {
-		city,
-		country,
 		currentTime: currentTimeFormatted,
 		currentTemp: Math.round(currentTemp),
 		maxTemp: Math.round(maxTemp),
@@ -62,23 +55,25 @@ function getCurrentTimeHumidity(currentTime, hourlyTime, humidity) {
 	return humidity[positionTime]
 }
 
-function dateFormatter(time) {
-	const date = new Date(time * 1000)
-	const dateStr = date.toLocaleDateString([], {
-		weekday: 'short',
-		year: 'numeric',
-		month: 'short',
-		day: 'numeric'
-	})
-	return dateStr
-}
-export function currentTimeFormatter(currentTime, timeZone) {
+function currentTimeFormatter(currentTime, timeZone) {
 	const date = new Date()
 	const parseDate = (date, timeZone) => {
 		const newDate = utcToZonedTime(date, timeZone)
 		return format(newDate, 'HH:mm', { timeZone })
 	}
 	const message = parseDate(date, timeZone)
-	const result = dateFormatter(currentTime)
+	const result = dateFormatter(currentTime, timeZone)
 	return `${result}, ${message}`
+}
+function dateFormatter(currentTime, timeZone) {
+	const date = new Date(currentTime * 1000)
+	const localTime = date.toLocaleDateString([], {
+		timeZone,
+		weekday: 'short',
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric'
+	})
+
+	return localTime
 }
