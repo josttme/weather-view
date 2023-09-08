@@ -1,5 +1,8 @@
 import { utcToZonedTime, format } from 'date-fns-tz'
 import { getWeatherCityByLatLong } from '../services/api'
+import { weatherCodes } from '../services/weatherCodes.json'
+import { ICON_MAP } from '../utils/iconMap'
+
 export function useWeather() {
 	const getCityByLatLong = async (latitude, longitude) => {
 		if (latitude === undefined || longitude === undefined) return null
@@ -36,6 +39,8 @@ function parseCurrentWeather({
 	const { time, relativehumidity_2m: relativehumidity2m } = hourly
 	const humidity = getCurrentTimeHumidity(currentTime, time, relativehumidity2m)
 	const currentTimeFormatted = currentTimeFormatter(currentTime, timezone)
+	const weatherDescription = getWeatherDescription(iconCode)
+	const weatherIcon = getIcon(iconCode, currentTime, sunrise, sunset, timezone)
 	return {
 		currentTime: currentTimeFormatted,
 		currentTemp: Math.round(currentTemp),
@@ -47,7 +52,9 @@ function parseCurrentWeather({
 		iconCode,
 		timezone,
 		sunrise,
-		sunset
+		sunset,
+		weatherDescription,
+		weatherIcon
 	}
 }
 function getCurrentTimeHumidity(currentTime, hourlyTime, humidity) {
@@ -62,18 +69,45 @@ function currentTimeFormatter(currentTime, timeZone) {
 		return format(newDate, 'HH:mm', { timeZone })
 	}
 	const message = parseDate(date, timeZone)
-	const result = dateFormatter(currentTime, timeZone)
-	return `${result}, ${message}`
+	const localDate = dateFormatter(currentTime, timeZone)
+
+	return `${localDate}, ${message}`
 }
 function dateFormatter(currentTime, timeZone) {
 	const date = new Date(currentTime * 1000)
-	const localTime = date.toLocaleDateString([], {
+	const options = {
 		timeZone,
 		weekday: 'short',
-		year: 'numeric',
+		day: 'numeric',
 		month: 'short',
-		day: 'numeric'
-	})
+		year: '2-digit'
+	}
+	const localDate = date.toLocaleDateString([], options)
 
-	return localTime
+	return localDate
+}
+function getWeatherDescription(code) {
+	return weatherCodes[code]
+}
+function getIcon(iconCode, currentTime, sunrise, sunset, timeZone) {
+	const icon = ICON_MAP.get(iconCode)
+	if (icon !== 'day' && icon !== 'cloudy-cay') {
+		return icon
+	} else {
+		const dayOrNight = isItDayOrNight(currentTime, sunrise, sunset, timeZone)
+		if (dayOrNight) {
+			return 'day'
+		} else {
+			return 'night'
+		}
+	}
+}
+function isItDayOrNight(currentTime, sunrise, sunset, timezone) {
+	const currentTimeZoned = utcToZonedTime(currentTime, timezone)
+	const sunriseZoned = utcToZonedTime(sunrise, timezone)
+	const sunsetZoned = utcToZonedTime(sunset, timezone)
+	const isDayOrNight =
+		currentTimeZoned.getTime() > sunriseZoned.getTime() &&
+		currentTimeZoned.getTime() < sunsetZoned.getTime()
+	return isDayOrNight
 }
