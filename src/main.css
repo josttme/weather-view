@@ -2,16 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-	font-family:
-		-apple-system,
-		BlinkMacSystemFont,
-		segoe ui,
-		Roboto,
-		Helvetica,
-		Arial,
-		sans-serif,
-		apple color emoji,
-		segoe ui emoji,
-		segoe ui symbol;
+@font-face {
+	font-family: 'Nunito Regular';
+	src: url('/Nunito-Regular.woff2') format('woff2');
+}
+@layer base {
+	html {
+		font-family:
+			Nunito Regular,
+			-apple-system,
+			BlinkMacSystemFont,
+			segoe ui,
+			Roboto,
+			Helvetica,
+			Arial,
+			sans-serif,
+			apple color emoji,
+			segoe ui emoji,
+			segoe ui symbol;
+	}
 }
