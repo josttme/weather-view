@@ -23,15 +23,28 @@ function mappedCities(city) {
 	}
 }
 async function fetchCity({ searchTerm }) {
-	if (searchTerm === ' ' || searchTerm === undefined) return null
-	console.log(searchTerm)
+	// Validación de `searchTerm`
+	if (!searchTerm || searchTerm.trim() === '') {
+		return null
+	}
+
 	try {
-		const res = await fetch(`${API_URL(searchTerm)}`)
+		const res = await fetch(API_URL(searchTerm))
+
 		if (!res.ok) {
 			throw new Error(`Error fetching data: ${res.status} ${res.statusText}`)
 		}
+
 		const data = await res.json()
-		const cities = data?.results?.map((city) => mappedCities(city))
+
+		// Manejo de errores específicos de la API (si corresponde)
+		if (data.error) {
+			throw new Error(`API error: ${data.error}`)
+		}
+		const cities = data?.results
+			? data.results.map((city) => mappedCities(city))
+			: []
+
 		return { cities }
 	} catch (error) {
 		console.error('Error fetching data:', error)

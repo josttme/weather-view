@@ -7,7 +7,16 @@ export function useListCities({ searchTerm }) {
 	const [error, setError] = useState(null)
 
 	useEffect(() => {
-		if (!searchTerm) return
+		if (!searchTerm) {
+			setCities([])
+			setLoading(false)
+			setError(null)
+			return
+		}
+
+		setLoading(true)
+		setError(null)
+
 		fetchCity({ searchTerm })
 			.then((result) => {
 				const { cities } = result
@@ -15,7 +24,7 @@ export function useListCities({ searchTerm }) {
 				setLoading(false)
 			})
 			.catch((error) => {
-				setError(error)
+				setError(error.message || 'Error desconocido')
 				setLoading(false)
 			})
 	}, [searchTerm])

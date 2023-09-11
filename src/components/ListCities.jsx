@@ -2,11 +2,11 @@ import PropTypes from 'prop-types'
 import { ItemCity } from './ItemCity'
 
 export function ListCities({ cities, searchTerm }) {
-	if (cities?.length === 0 || searchTerm.trim() === '') return null
+	if (!cities?.length || !searchTerm.trim()) return
 
 	return (
 		<div className="absolute flex w-full flex-col gap-1  rounded-lg border p-1">
-			{cities.map((city) => (
+			{cities?.map((city) => (
 				<ItemCity key={city.id} {...city} />
 			))}
 		</div>
@@ -14,6 +14,6 @@ export function ListCities({ cities, searchTerm }) {
 }
 
 ListCities.propTypes = {
-	cities: PropTypes.array.isRequired,
-	searchTerm: PropTypes.string.isRequired
+	cities: PropTypes.array,
+	searchTerm: PropTypes.string
 }
