@@ -1,8 +1,9 @@
 import debounce from 'just-debounce-it'
 import { PropTypes } from 'prop-types'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
-export function SearchCities({ onSearch }) {
+export function SearchCities({ onSearch, handleBlur, handleFocus }) {
+	const [isFocus, setisFocus] = useState(false)
 	const debounceGetCities = useCallback(
 		debounce((search) => {
 			onSearch(search)
@@ -15,16 +16,28 @@ export function SearchCities({ onSearch }) {
 		if (newQuery.startsWith(' ')) return
 		debounceGetCities(newQuery)
 	}
-
+	const handleInternalFocus = () => {
+		setisFocus(true)
+		handleFocus()
+	}
+	const handleInternalBlur = () => {
+		setisFocus(false)
+		handleBlur()
+	}
+	const isFocusStyles = isFocus && 'border-white'
 	return (
-		<div className="input-group relative mb-4 flex h-11 w-full  items-stretch">
+		<div
+			className={`input-group relative mb-1 flex h-14 w-full items-stretch rounded-lg  border border-transparent text-lg ${isFocusStyles}`}
+		>
 			<input
-				className="form-control relative m-0 block w-full min-w-0 flex-auto rounded-bl-lg rounded-tl-lg  border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-gray-500 focus:bg-white focus:text-gray-700 focus:outline-none"
-				placeholder="Search..."
+				className="form-control 0 border-secondary bg-secondary focus:border-r-secondary relative m-0 block w-full  min-w-0 flex-auto rounded-bl-lg rounded-tl-lg border bg-clip-padding px-3 py-1.5  text-white transition ease-in-out    focus:outline-none"
+				placeholder="Buenos Aires, San Francisco..."
 				onChange={handleChange}
 				type="search"
+				onBlur={handleInternalBlur}
+				onFocus={handleInternalFocus}
 			/>
-			<span className=" flex items-center rounded-br-lg rounded-tr-lg bg-gray-900 px-6 py-2.5  leading-tight text-white ">
+			<span className="bg-secondary flex items-center rounded-br-lg rounded-tr-lg px-6 py-2.5  leading-tight text-white">
 				<svg
 					aria-hidden="true"
 					focusable="false"
@@ -45,5 +58,7 @@ export function SearchCities({ onSearch }) {
 	)
 }
 SearchCities.propTypes = {
-	onSearch: PropTypes.func.isRequired
+	onSearch: PropTypes.func.isRequired,
+	handleBlur: PropTypes.func.isRequired,
+	handleFocus: PropTypes.func.isRequired
 }
