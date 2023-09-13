@@ -25,7 +25,7 @@ export function ItemCity({
 	}
 	return (
 		<div
-			className="hover:bg-tertiary  bg-secondary flex cursor-pointer rounded-lg p-1"
+			className="flex  cursor-pointer rounded-lg bg-secondary p-1 hover:bg-tertiary"
 			onClick={handleClick}
 		>
 			<div className="mx-4 grid w-12 place-content-center">

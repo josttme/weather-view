@@ -5,7 +5,9 @@ import { WeatherProvider } from '../context/WeatherContext'
 function App() {
 	return (
 		<WeatherProvider>
-			<h1 className="bg-red-200 text-center">Weather View</h1>
+			<h1 className="my-8 text-center text-4xl font-semibold text-white/80">
+				Weather View
+			</h1>
 			<Search />
 			<WeatherCardsContainer />
 		</WeatherProvider>

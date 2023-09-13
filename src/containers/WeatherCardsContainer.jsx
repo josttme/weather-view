@@ -7,7 +7,7 @@ export function WeatherCardsContainer() {
 	console.log(citiesStorage)
 	if (citiesStorage === null) return
 	return (
-		<section className="mx-auto flex w-full max-w-7xl flex-wrap justify-center gap-4 bg-cyan-800 p-4">
+		<section className="mx-auto flex w-full max-w-7xl flex-wrap justify-center gap-4 p-4">
 			{citiesStorage.map((city) => (
 				<WeatherCard key={city.id} {...city} />
 			))}
