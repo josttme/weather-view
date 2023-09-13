@@ -1,22 +1,11 @@
 import PropTypes from 'prop-types'
 import { ItemCity } from './ItemCity'
 
-export function ListCities({
-	cities,
-	searchTerm,
-	loading,
-	isSearchFocus,
-	handleClick
-}) {
-	const handleCityClick = () => {
-		handleClick() // Llama a la función handleClick cuando se haga clic en la lista de ciudades
-	}
-	if (!cities?.length || !searchTerm.trim() || loading || !isSearchFocus) return
+export function ListCities({ cities, searchTerm, loading, isListVisible }) {
+	if (!cities?.length || !searchTerm.trim() || loading || !isListVisible) return
+
 	return (
-		<div
-			className="absolute flex w-full flex-col gap-1 rounded-lg bg-primary p-1"
-			onClick={handleCityClick}
-		>
+		<div className="absolute flex w-full flex-col gap-1 rounded-lg bg-primary p-1">
 			{cities?.map((city) => (
 				<ItemCity key={city.id} {...city} />
 			))}
@@ -29,6 +18,5 @@ ListCities.propTypes = {
 	searchTerm: PropTypes.string,
 	loading: PropTypes.bool,
 	isSearchFocus: PropTypes.bool,
-	setIsSelectedCity: PropTypes.func,
-	handleClick: PropTypes.func
+	isListVisible: PropTypes.bool
 }

@@ -1,32 +1,35 @@
 import { useState } from 'react'
 import { ListCities } from '../components/ListCities'
+import { LoaderSpinner } from '../components/LoaderSpinner'
 import { SearchCities } from '../components/SeachCities'
 import { useListCities } from '../hooks/useListCities'
-import { LoaderSpinner } from '../components/LoaderSpinner'
 
 export function Search() {
-	const [searchTerm, setSearchTerm] = useState(' ')
-	const [isSearchFocus, setIsSearchFocus] = useState(false)
-	const [isSelectedCity, setIsSelectedCity] = useState(false)
+	const [searchTerm, setSearchTerm] = useState('')
+	const [isListVisible, setIsListVisible] = useState(false)
+	const { cities, loading } = useListCities({ searchTerm })
 
 	const handleSearchChange = (search) => {
 		setSearchTerm(search)
+		setIsListVisible(true)
 	}
-	const { cities, loading } = useListCities({ searchTerm })
-	const handleChange = () => {
-		if (isSelectedCity) return
-		setIsSearchFocus(!isSearchFocus)
+
+	const handleBlur = () => {
+		setTimeout(() => {
+			setIsListVisible(false)
+		}, 100)
 	}
-	const handleClick = () => {
-		setIsSelectedCity(true)
+
+	const handleFocus = () => {
+		setIsListVisible(true)
 	}
-	console.log(isSelectedCity)
+
 	return (
 		<section className="relative m-3 mx-auto w-11/12 max-w-md">
 			<SearchCities
-				onSearch={handleSearchChange}
-				handleBlur={handleChange}
-				handleFocus={handleChange}
+				handleSearchChange={handleSearchChange}
+				handleBlur={handleBlur}
+				handleFocus={handleFocus}
 			/>
 
 			<LoaderSpinner loading={loading} />
@@ -35,8 +38,7 @@ export function Search() {
 				cities={cities}
 				searchTerm={searchTerm}
 				loading={loading}
-				isSearchFocus={isSearchFocus}
-				handleClick={handleClick}
+				isListVisible={isListVisible}
 			/>
 		</section>
 	)

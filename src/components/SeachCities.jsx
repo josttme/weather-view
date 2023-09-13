@@ -2,11 +2,11 @@ import debounce from 'just-debounce-it'
 import { PropTypes } from 'prop-types'
 import { useCallback, useState } from 'react'
 
-export function SearchCities({ onSearch, handleBlur, handleFocus }) {
+export function SearchCities({ handleSearchChange, handleBlur, handleFocus }) {
 	const [isFocus, setisFocus] = useState(false)
 	const debounceGetCities = useCallback(
 		debounce((search) => {
-			onSearch(search)
+			handleSearchChange(search)
 		}, 400),
 		[]
 	)
@@ -30,14 +30,14 @@ export function SearchCities({ onSearch, handleBlur, handleFocus }) {
 			className={`input-group relative mb-1 flex h-14 w-full items-stretch rounded-lg  border border-transparent text-lg ${isFocusStyles}`}
 		>
 			<input
-				className="form-control 0 border-secondary bg-secondary focus:border-r-secondary relative m-0 block w-full  min-w-0 flex-auto rounded-bl-lg rounded-tl-lg border bg-clip-padding px-3 py-1.5  text-white transition ease-in-out    focus:outline-none"
+				className="form-control 0 relative m-0 block w-full min-w-0 flex-auto rounded-bl-lg  rounded-tl-lg border border-secondary bg-secondary bg-clip-padding px-3 py-1.5 text-white  transition ease-in-out focus:border-r-secondary    focus:outline-none"
 				placeholder="Buenos Aires, San Francisco..."
 				onChange={handleChange}
 				type="search"
 				onBlur={handleInternalBlur}
 				onFocus={handleInternalFocus}
 			/>
-			<span className="bg-secondary flex items-center rounded-br-lg rounded-tr-lg px-6 py-2.5  leading-tight text-white">
+			<span className="flex items-center rounded-br-lg rounded-tr-lg bg-secondary px-6 py-2.5  leading-tight text-white">
 				<svg
 					aria-hidden="true"
 					focusable="false"
@@ -58,7 +58,7 @@ export function SearchCities({ onSearch, handleBlur, handleFocus }) {
 	)
 }
 SearchCities.propTypes = {
-	onSearch: PropTypes.func.isRequired,
+	handleSearchChange: PropTypes.func.isRequired,
 	handleBlur: PropTypes.func.isRequired,
 	handleFocus: PropTypes.func.isRequired
 }
