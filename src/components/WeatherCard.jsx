@@ -31,8 +31,8 @@ export function WeatherCard(city) {
 	} = weatherData
 	const iconWeather = `/${weatherIcon}.svg`
 	return (
-		<div className=" grid h-[290px] w-[500px] grid-cols-4 grid-rows-6 items-center rounded-lg bg-blue-700 bg-gradient-to-r from-[#00061f] via-[#001460] to-[#001b7a] p-4 text-xl  text-white/80">
-			<div className="col-span-4 flex items-center ">
+		<div className="relative grid h-[290px] w-[500px] grid-cols-4 grid-rows-6 items-center rounded-lg bg-blue-700 bg-gradient-to-r from-[#00061f] via-[#001460] to-[#001b7a] p-4 text-xl  text-white/80">
+			<div className=" col-span-4 flex items-center">
 				<div className="h-7 w-7">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -46,6 +46,18 @@ export function WeatherCard(city) {
 				<span>
 					{cityName} ({country})
 				</span>
+			</div>
+			<div className=" absolute right-3 top-3  grid h-5 w-5 cursor-pointer place-content-center opacity-70 hover:text-[#ff2f2f] ">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="5 5 15 15"
+					className=" h-5 w-5 items-center justify-center self-center"
+				>
+					<path
+						fill="currentColor"
+						d="m14.8 12 3.6-3.6c.8-.8.8-2 0-2.8-.8-.8-2-.8-2.8 0L12 9.2 8.4 5.6c-.8-.8-2-.8-2.8 0-.8.8-.8 2 0 2.8L9.2 12l-3.6 3.6c-.8.8-.8 2 0 2.8.4.4.9.6 1.4.6s1-.2 1.4-.6l3.6-3.6 3.6 3.6c.4.4.9.6 1.4.6s1-.2 1.4-.6c.8-.8.8-2 0-2.8L14.8 12z"
+					/>
+				</svg>
 			</div>
 			<img
 				className="col-span-2 row-span-4 h-36 w-36  place-self-center"
