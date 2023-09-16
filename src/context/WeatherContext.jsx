@@ -25,6 +25,7 @@ export function WeatherProvider({ children }) {
 	const valueContext = {
 		selectCity,
 		citiesStorage,
+		setCityStorage,
 		weatherData,
 		getCityByLatLong
 	}

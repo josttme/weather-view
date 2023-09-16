@@ -1,18 +1,19 @@
 import { useContext, useEffect, useState } from 'react'
 import { WeatherContext } from '../context/WeatherContext'
 import { PropTypes } from 'prop-types'
+import { useRemoveCard } from '../hooks/useRemoveCard'
 
 export function WeatherCard(city) {
-	const { latitude, longitude, name: cityName, country } = city
+	const { latitude, longitude, name: cityName, country, id } = city
 	const { getCityByLatLong } = useContext(WeatherContext)
 	const [weatherData, setWeatherData] = useState(null)
+	const { removeCard } = useRemoveCard()
 
 	useEffect(() => {
 		getCityByLatLong(latitude, longitude)
 			.then((data) => setWeatherData(data))
 			.catch((error) => console.error(error))
 	}, [])
-
 	if (weatherData === null) return
 	const {
 		currentTemp,
@@ -29,6 +30,9 @@ export function WeatherCard(city) {
 		weatherDescription,
 		weatherIcon
 	} = weatherData
+	const handleRemove = () => {
+		removeCard(id)
+	}
 	const iconWeather = `/${weatherIcon}.svg`
 	return (
 		<div className="relative grid h-[290px] w-[500px] grid-cols-4 grid-rows-6 items-center rounded-lg bg-blue-700 bg-gradient-to-r from-[#00061f] via-[#001460] to-[#001b7a] p-4 text-xl  text-white/80">
@@ -47,7 +51,10 @@ export function WeatherCard(city) {
 					{cityName} ({country})
 				</span>
 			</div>
-			<div className=" absolute right-3 top-3  grid h-5 w-5 cursor-pointer place-content-center opacity-70 hover:text-[#ff2f2f] ">
+			<div
+				className=" absolute right-3 top-3  grid h-5 w-5 cursor-pointer place-content-center opacity-70 hover:text-[#ff2f2f] "
+				onClick={handleRemove}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="5 5 15 15"
