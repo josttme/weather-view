@@ -5,7 +5,7 @@ export function ListCities({ cities, searchTerm, loading, isListVisible }) {
 	if (!cities?.length || !searchTerm.trim() || loading || !isListVisible) return
 
 	return (
-		<div className="absolute flex w-full flex-col gap-1 rounded-lg bg-primary p-1">
+		<div className="absolute z-10 flex w-full flex-col gap-1 rounded-lg bg-primary p-1">
 			{cities?.map((city) => (
 				<ItemCity key={city.id} {...city} />
 			))}

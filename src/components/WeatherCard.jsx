@@ -71,9 +71,9 @@ export function WeatherCard(city) {
 				src={iconWeather}
 				alt={weatherIcon}
 			/>
-			<span className="col-span-2 text-center ">{currentTime}</span>
-			<div className="col-span-2 row-span-2 grid place-content-center text-center">
-				<span className="text-6xl font-bold text-white/80">
+			<span className="col-span-2 text-center leading-5">{currentTime}</span>
+			<div className="col-span-2 row-span-2  grid place-content-center text-center">
+				<span className=" text-6xl font-bold text-white/80">
 					{currentTemp}°C
 				</span>
 				<span>
