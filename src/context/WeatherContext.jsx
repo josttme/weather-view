@@ -18,16 +18,13 @@ export function WeatherProvider({ children }) {
 		setCityStorage(selectedCities)
 	}, [selectedCities])
 
-	/* 	useEffect(() => {
-		console.log(citiesStorage)
-	}, []) */
-
 	const valueContext = {
 		selectCity,
 		citiesStorage,
 		setCityStorage,
 		weatherData,
-		getCityByLatLong
+		getCityByLatLong,
+		setSelectedCities
 	}
 
 	return (
